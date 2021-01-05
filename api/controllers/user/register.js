@@ -43,24 +43,60 @@ module.exports = {
   },
 
 
-  fn: async function (inputs) {
+  fn: async function (inputs, exits) {
 
-    const newEmailAddress = inputs.email.toLowerCase();
-    const token = await sails.helpers.strings.random('url-friendly');
+    try {
+      
+      const newEmailAddress = inputs.email.toLowerCase();
+      const token = await sails.helpers.strings.random('url-friendly');
 
-    let newUser = await User.create({
-      fullName: inputs.fullName,
-      email: newEmailAddress,
-      password: inputs.password,
-      emailProofToken: token,
-      emailProofTokenExpiresAt:
-        Date.now() + sails.config.custom.emailProofTokenTTL,
-    }).fetch();
+      let newUser = await User.create({
+        fullName: inputs.fullName,
+        email: newEmailAddress,
+        password: inputs.password,
+        emailProofToken: token,
+        emailProofTokenExpiresAt:
+          Date.now() + sails.config.custom.emailProofTokenTTL,
+      }).fetch();
 
-    const confirmLink = `${sails.config.custom.baseUrl}/user/confirm?token=${token}`;
+      const confirmLink = `${sails.config.custom.baseUrl}/user/confirm?token=${token}`;
 
-    // All done.
-    return;
+      const email = {
+        to: newUser.email,
+        subject: 'Confirm Your account',
+        template: 'confirm',
+        context: {
+          name: newUser.fullName,
+          confirmLink: confirmLink,
+        },
+      };
+
+      await sails.helpers.sendMail(email);
+
+      return exits.success({
+        message: `An account has been created for ${newUser.email} successfully. Check your email to verify`,
+      });
+
+      
+    } catch (error) {
+      console.log (error)
+      
+        if (error.code === 'E_UNIQUE') {
+            return exits.emailAlreadyInUse({
+              message: 'Oops :) an error occurred',
+              error: 'This email address already exits',
+            });
+        }
+
+        else {
+          return exits.error({
+            message: 'Oops :) an error occurred',
+            error: error.message,
+          });
+        }
+    }
+
+    
 
   }
 

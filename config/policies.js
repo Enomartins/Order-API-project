@@ -10,6 +10,8 @@
 
 module.exports.policies = {
 
+  "user/login": 'can-login'
+
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions, unless overridden.       *
