@@ -12,6 +12,7 @@ module.exports.routes = {
 
     "GET /": "home/index",
     'POST /user/register': 'user/register',
-    'POST /user/login': 'user/login'
-    
+    'POST /user/login': 'user/login',
+    'POST /order/create': 'order/create',
+    'GET /order/all': 'order/all',
 };
