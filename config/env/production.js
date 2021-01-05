@@ -48,7 +48,7 @@ module.exports = {
     ***************************************************************************/
     default: {
       adapter: 'sails-mysql',
-      url: 'mysql://user:password@host:port/database',
+      url: 'postgres://himvhfsinlnpyv:3c16702abeb3925e64274b744646abcd66a8478458e163b53c22f133d6cb398c@ec2-52-44-46-66.compute-1.amazonaws.com:5432/d1t1aqeaqcjgno',
       //--------------------------------------------------------------------------
       //  /\   To avoid checking it in to version control, you might opt to set
       //  ||   sensitive credentials like `url` using an environment variable.
@@ -251,8 +251,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      'https://example.com',
-      'https://staging.example.com',
+      'https://damp-retreat-81173.herokuapp.com/',
     ],
 
 
